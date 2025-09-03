@@ -3,6 +3,7 @@ export default function Home() {
     <main>
       <h1>はじめてのNext.js！</h1>
       <p>これが私の最初のページです。</p>
+      <p>banana。</p>
     </main>
   );
 }
