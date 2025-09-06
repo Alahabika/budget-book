@@ -51,10 +51,33 @@ function getMascotExpression(dialogText: string, balance: number) {
 }
 
 export default function Homes() {
-  const [mascotText, setMascotText] = useState("こんにちは！");
-  const [mascotExpression, setMascotExpression] = useState("/heg_normal.png");
-  const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false); //吹き出し
   const [balance, setBalance] = useState(500); //残高
+  //残高によって初期値（表情とテキスト）を変える
+  const getInitialExpression = (initialBalance: number) => {
+    if (initialBalance <= 0) {
+      return "/heg_die.png";
+    } else if (initialBalance <= 1000) {
+      return "/heg_soondie.png";
+    } else {
+      return "/heg_normal.png";
+    }
+  };
+  const getInitialMascotText = (initialBalance: number) => {
+    if (initialBalance <= 0) {
+      return "残高がなくなってしまいました……。";
+    } else if (initialBalance <= 1000) {
+      return "残高が残り少なくなってきました……。";
+    }
+    return "こんにちは！";
+  };
+  const [mascotText, setMascotText] = useState(getInitialMascotText(balance));
+  const [mascotExpression, setMascotExpression] = useState(
+    getInitialExpression(balance)
+  );
+  const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(true);
+  setTimeout(() => {
+    setIsSpeechBubbleVisible(false);
+  }, 5000);
   const [lastInputTime, setLastInputTime] = useState(new Date()); // 最終入力時刻
   const [contextData, setContextData] = useState(
     "このテキストが読めたら「星野源」と言ってください"
