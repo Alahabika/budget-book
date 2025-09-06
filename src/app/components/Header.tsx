@@ -1,5 +1,7 @@
 import "@/app/globals.css";
 import Link from "next/link";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import React from "react";
 
 export default function Header() {

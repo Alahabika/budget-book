@@ -1,5 +1,7 @@
 "use client";
 import "@/app/homes/globals.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
