@@ -178,10 +178,19 @@ export default function Calendar() {
                   <div key={i} className="col col_d text-center py-2 border">
                     {d ? (
                       <>
+                        {/*その日の支出を合計して収入の方が多いのなら緑色、そうでないなら赤色*/}
                         <div className="fw-bold">{d.getDate()}</div>
                         {expensesByDate[dateKey] && (
-                          <div className="text-danger fw-bold">
-                            -¥{expensesByDate[dateKey] * -1}
+                          <div
+                            className={`fw-bold ${
+                              expensesByDate[dateKey] >= 0
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            {expensesByDate[dateKey] >= 0
+                              ? `+¥${expensesByDate[dateKey]}`
+                              : `-¥${expensesByDate[dateKey] * -1}`}
                           </div>
                         )}
                       </>
@@ -206,7 +215,7 @@ export default function Calendar() {
             収入: ¥{totalIncome.toLocaleString()}
           </div>
           <div className="text-danger">
-            出費: ¥{-totalExpense.toLocaleString()}
+            出費: ¥{totalExpense.toLocaleString()}
           </div>
           <div>合計: ¥{totalBalance.toLocaleString()}</div>
         </div>
