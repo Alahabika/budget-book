@@ -16,11 +16,11 @@ async function generateMascotDialog(context: string, balance: number) {
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   let prompt;
   if (balance <= 0) {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は0円を下回り、あなたは栄養が足りなくなり死にました。ユーザーが貯金したいと思うように貯金したいと思うように30字程度の哀愁の漂うセリフを一つ提案してください。`;
+    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は0円を下回り、あなたは栄養が足りなくなり死にました。ユーザーが貯金したいと思うように貯金したいと思うように短い哀愁の漂うセリフを一つ提案してください。`;
   } else if (balance <= 1000) {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は1000円以下とかなり少ない状況です。そのためあなたは栄養不足でお腹がペコペコです。この状況が打破できるよう、ユーザーに30字程度の応援メッセージを一つ提案してください。`;
+    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は1000円以下とかなり少ない状況です。そのためあなたは栄養不足でお腹がペコペコです。この状況が打破できるよう、ユーザーに短い応援メッセージを一つ提案してください。`;
   } else {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーを応援し、アプリの利用を促進してください。現在の状況は以下の通りです。\n\n${context}\n\nこの状況に合った、30字程度のポジティブなセリフを一つ提案してください。`;
+    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーを応援し、アプリの利用を促進してください。現在の状況は以下の通りです。\n\n${context}\n\nこの状況に合った、短いポジティブなセリフを一つ提案してください。`;
   }
 
   const result = await model.generateContent(prompt);
@@ -51,7 +51,7 @@ function getMascotExpression(dialogText: string, balance: number) {
 }
 
 export default function Homes() {
-  const [balance, setBalance] = useState(500); //残高
+  const [balance, setBalance] = useState(-500); //残高
   //残高によって初期値（表情とテキスト）を変える
   const getInitialExpression = (initialBalance: number) => {
     if (initialBalance <= 0) {
@@ -99,7 +99,7 @@ export default function Homes() {
     setIsSpeechBubbleVisible(true);
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
-    }, 5000);
+    }, 10000);
   };
   return (
     <main className="d-flex flex-column align-items-center justify-content-center min-vh-100">
