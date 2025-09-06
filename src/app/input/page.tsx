@@ -8,12 +8,18 @@ export default function Input() {
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [category, setCategory] = useState("食費");
+  const [isIncome, setIsIncome] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let finalAmount = parseInt(amount, 10);
+    if (!isIncome) {
+      // 支出の場合、金額をマイナスにする
+      finalAmount = -finalAmount;
+    }
     const newEntry = {
       date: date,
-      amount: amount,
+      amount: finalAmount,
       memo: memo,
       category: category,
     };
@@ -27,6 +33,22 @@ export default function Input() {
   return (
     <div className="container d-flex flex-column align-items-center mt-5">
       <h1 className="mb-4">家計簿入力</h1>
+      <div className="d-flex mb-4">
+        <button
+          className={`btn ${
+            !isIncome ? "btn-primary" : "btn-outline-primary"
+          } me-2`}
+          onClick={() => setIsIncome(false)}
+        >
+          支出
+        </button>
+        <button
+          className={`btn ${isIncome ? "btn-primary" : "btn-outline-primary"}`}
+          onClick={() => setIsIncome(true)}
+        >
+          収入
+        </button>
+      </div>
       <form
         onSubmit={handleSubmit}
         className="w-100"
@@ -69,12 +91,22 @@ export default function Input() {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option>食費</option>
-            <option>外食費</option>
-            <option>日用品</option>
-            <option>交通費</option>
-            <option>娯楽費</option>
-            <option>その他</option>
+            {isIncome ? (
+              <>
+                <option>給与</option>
+                <option>お小遣い</option>
+                <option>その他収入</option>
+              </>
+            ) : (
+              <>
+                <option>食費</option>
+                <option>外食費</option>
+                <option>日用品</option>
+                <option>交通費</option>
+                <option>娯楽費</option>
+                <option>その他</option>
+              </>
+            )}
           </select>
         </div>
 
