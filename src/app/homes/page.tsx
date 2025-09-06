@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { supabase } from "../../../utils/supabase";
 
 async function generateMascotDialog(context: string, balance: number) {
   console.log("generateMascotDialog関数が呼び出されました。");
@@ -83,24 +84,44 @@ export default function Homes() {
     "このテキストが読めたら「星野源」と言ってください"
   );
   useEffect(() => {
+    const fetchBalance = async () => {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("amount");
+      if (error) {
+        console.error("Error fetching transactions:", error);
+        return;
+      }
+      if (data) {
+        const total = data.reduce((sum, row) => sum + row.amount, 0);
+        setBalance(total);
+      }
+    };
+    fetchBalance();
+  }, []);
+  useEffect(() => {
     async function updateMascot() {
-      const dialog = await generateMascotDialog(contextData, balance); // 状況に応じてセリフ生成
+      const dialog = await generateMascotDialog("", balance);
       setMascotText(dialog);
-      const expression = getMascotExpression(dialog, balance); // セリフに応じて表情選択
-      setMascotExpression(expression);
+      setMascotExpression(getMascotExpression(dialog, balance));
     }
-  }, [balance, contextData]);
+    if (balance !== null) {
+      updateMascot();
+    }
+  }, [balance]);
+
   const handleClick = () => {
-    generateMascotDialog(contextData, balance).then((dialog) => {
+    generateMascotDialog("", balance).then((dialog) => {
       setMascotText(dialog);
       setMascotExpression(getMascotExpression(dialog, balance));
     });
-    // 吹き出しを表示
     setIsSpeechBubbleVisible(true);
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
     }, 10000);
+    setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
   };
+
   return (
     <main className="d-flex flex-column align-items-center justify-content-center min-vh-100">
       <div className="text-center position-relative">
