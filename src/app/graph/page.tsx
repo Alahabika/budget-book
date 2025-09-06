@@ -5,29 +5,36 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { supabase } from "../../../utils/supabase";
 ChartJS.register(ArcElement, Tooltip, Legend);
-const expenses = [
-  { date: "2025-09-01", amount: -2000, category: "食費" },
-  { date: "2025-09-02", amount: -500, category: "交通費" },
-  { date: "2025-09-05", amount: -3000, category: "食費" },
-  { date: "2025-09-06", amount: -1500, category: "娯楽費" },
-  { date: "2025-09-10", amount: -1000, category: "日用品" },
-  { date: "2025-09-12", amount: -800, category: "交通費" },
-  { date: "2025-09-15", amount: -5000, category: "食費" },
-  { date: "2025-09-20", amount: -200, category: "外食費" },
-  { date: "2025-09-25", amount: -2000, category: "食費" },
-  { date: "2025-09-28", amount: -800, category: "交通費" },
-  { date: "2025-09-30", amount: -500, category: "その他" },
-  { date: "2025-10-02", amount: -4000, category: "食費" },
-  { date: "2025-10-10", amount: -1000, category: "日用品" },
-  { date: "2025-8-02", amount: 4000, category: "給料" },
-];
+
+type Expense = {
+  id: number;
+  amount: number;
+  category: string;
+  type: "+" | "-";
+  date: string;
+};
 
 export default function Graph() {
   const today = new Date();
+  const [expenses, setExpenses] = useState<any[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+
+  useEffect(() => {
+  const fetchExpenses = async () => {
+    const { data, error } = await supabase.from("transactions").select("*");
+    if (error) {
+      console.error("Error fetching data:", error);
+    } else {
+      setExpenses(data || []);
+    }
+  };
+  fetchExpenses();
+}, []);
+
   // 前月へ移動
   const goToPrevMonth = () => {
     setCurrentDate(
