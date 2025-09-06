@@ -109,55 +109,11 @@ export default function Calendar() {
           >
             {year}年 {month + 1}月
           </button>
-          {/*年月選択のドロップダウン */}
-          {showMonthSelector && (
-            <div className="month-selector-dropdown position-absolute top-100 start-50 translate-middle-x mt-2">
-              {/* 年の選択リスト */}
-              <div className="d-flex justify-content-center mb-2">
-                <select
-                  className="form-select w-auto"
-                  onChange={(e) => {
-                    const newYear = parseInt(e.target.value);
-                    setCurrentDate(new Date(newYear, currentDate.getMonth()));
-                  }}
-                  value={year}
-                >
-                  {[...Array(10)].map((_, i) => (
-                    <option key={year - 5 + i} value={year - 5 + i}>
-                      {year - 5 + i}年
-                    </option>
-                  ))}
-                </select>
-              </div>
 
-              {/* 月の選択リスト */}
-              <div
-                className="d-flex flex-wrap justify-content-center"
-                style={{ maxWidth: "250px" }}
-              >
-                {[...Array(12)].map((_, i) => (
-                  <button
-                    key={i}
-                    className={`btn m-1 ${
-                      currentDate.getMonth() === i
-                        ? "btn-primary"
-                        : "btn-outline-primary"
-                    }`}
-                    onClick={() => {
-                      setCurrentDate(new Date(year, i));
-                      setShowMonthSelector(false);
-                    }}
-                  >
-                    {i + 1}月
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          <button className="btn btn-outline-secondary" onClick={goToNextMonth}>
+            &gt;
+          </button>
         </div>
-        <button className="btn btn-outline-secondary" onClick={goToNextMonth}>
-          &gt;
-        </button>
       </div>
 
       <div className="row text-center border-bottom pb-2">
