@@ -1,6 +1,5 @@
 import { supabase } from "../utils/supabase"
 
-export const getAllBudgets = async() =>{
-    const budgets = await supabase.from("budget_book").select("*");
-    return budgets;
+export const getAllBudgets = async () => {
+  return await supabase.from("transactions").select("*");
 };

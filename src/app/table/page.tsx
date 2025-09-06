@@ -2,21 +2,42 @@
 import "@/app/table/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ScrollPicker from "react-scroll-picker";
+import { getAllBudgets } from "../../../utils/supabasefunctions";
 
 // 仮のデータを定義
-const Expenses = [
-  { date: "2025-09-05", amount: 3500 },
-  { date: "2025-09-05", amount: 2500 },
-  { date: "2025-09-10", amount: 1500 },
-  { date: "2025-09-15", amount: 5000 },
-  { date: "2025-09-20", amount: 200 },
-];
+type Expense = {
+  id: number;
+  user_id: string;
+  amount: number;
+  category: string;
+  type: "+" | "-";
+  date: string;
+};
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 8)); // 2025年9月を初期値に
   const [showMonthSelector, setShowMonthSelector] = useState(false);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      const { data, error } = await getAllBudgets();
+      console.log("data:", data, "error:", error);
+
+      if (error) {
+        console.error("Error fetching expenses:", error);
+      } 
+      if (data) {
+      setExpenses(data as Expense[]);
+      } else {
+        setExpenses([]); // ← null の場合に保険
+      }
+    };
+    fetchExpenses();
+
+  }, []);
 
   // 前月へ移動
   const goToPrevMonth = () => {
@@ -55,15 +76,14 @@ export default function Calendar() {
     calendarDays.push(new Date(year, month, i));
   }
 
-  const expensesByDate = {};
-  Expenses.forEach((expense) => {
+  const expensesByDate: Record<string, number> = {};
+  expenses.forEach((expense) => {
     const expenseDate = new Date(expense.date);
-    const dateKey = `${expenseDate.getFullYear()}-${String(
-      expenseDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(expenseDate.getDate() - 1).padStart(2, "0")}`;
-    expensesByDate[dateKey] = (expensesByDate[dateKey] || 0) + expense.amount; // 同じ日付の出費を合計
+    const dateKey = expenseDate.toISOString().slice(0, 10); // ← シンプルに
+    expensesByDate[dateKey] =
+      (expensesByDate[dateKey] || 0) + expense.amount;
   });
-  const monthlyExpenses = Expenses.filter((expense) => {
+  const monthlyExpenses = expenses.filter((expense) => {
     const expenseDate = new Date(expense.date);
     return (
       expenseDate.getFullYear() === year && expenseDate.getMonth() === month
