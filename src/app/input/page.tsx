@@ -3,7 +3,32 @@ import "@/app/input/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState } from "react";
-import {supabase} from "../../../utils/supabase";
+import { supabase } from "../../../utils/supabase";
+import {
+  FaMoneyBillWave,
+  FaWallet,
+  FaUtensils,
+  FaShoppingBag,
+  FaSubway,
+  FaFilm,
+  FaPiggyBank,
+  FaMoneyCheckAlt,
+  FaPlus,
+  FaCarrot,
+} from "react-icons/fa";
+
+const categoryIcons = {
+  食費: <FaCarrot />,
+  外食費: <FaUtensils />,
+  日用品: <FaShoppingBag />,
+  交通費: <FaSubway />,
+  娯楽費: <FaFilm />,
+  その他: <FaPlus />,
+  給与: <FaMoneyBillWave />,
+  お小遣い: <FaPiggyBank />,
+  その他収入: <FaMoneyCheckAlt />,
+};
+
 export default function Input() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [amount, setAmount] = useState("");
@@ -18,17 +43,17 @@ export default function Input() {
       // 支出の場合、金額をマイナスにする
       finalAmount = -finalAmount;
     }
-    const {data, error} = await supabase.from("transactions").insert([
+    const { data, error } = await supabase.from("transactions").insert([
       {
         date,
         amount: finalAmount,
         memo,
         category,
-        type:isIncome?"+":"-",
+        type: isIncome ? "+" : "-",
       },
     ]);
 
-      if (error) {
+    if (error) {
       console.error("Error inserting data:", error);
     } else {
       console.log("Inserted:", data);
@@ -36,55 +61,63 @@ export default function Input() {
       setDate(new Date().toISOString().slice(0, 10));
       setAmount("");
       setMemo("");
-      setCategory("食費");
+      setCategory(isIncome ? "給与" : "食費");
       console.log("家計簿が記録されました");
     }
   };
 
+  const handleIncomeClick = () => {
+    setIsIncome(true);
+    setCategory("給与");
+  };
+  const handleExpenseClick = () => {
+    setIsIncome(false);
+    setCategory("食費");
+  };
   return (
-    <div className="container d-flex flex-column align-items-center mt-5">
-      <h1 className="mb-4">家計簿入力</h1>
-      <div className="d-flex mb-4">
+    <div className="cute-container">
+      <h1 className="cute-title">家計簿入力</h1>
+      <div className="cute-buttons">
         <button
-          className={`btn ${
-            !isIncome ? "btn-primary" : "btn-outline-primary"
-          } me-2`}
-          onClick={() => setIsIncome(false)}
+          className={`cute-btn ${
+            !isIncome ? "cute-btn-primary" : "cute-btn-outline"
+          }`}
+          onClick={handleExpenseClick}
         >
+          <FaWallet className="me-2" />
           支出
         </button>
         <button
-          className={`btn ${isIncome ? "btn-primary" : "btn-outline-primary"}`}
-          onClick={() => setIsIncome(true)}
+          className={`cute-btn ${
+            isIncome ? "cute-btn-primary" : "cute-btn-outline"
+          }`}
+          onClick={handleIncomeClick}
         >
+          <FaMoneyBillWave className="me-2" />
           収入
         </button>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="w-100"
-        style={{ maxWidth: "400px" }}
-      >
-        <div className="mb-3">
-          <label htmlFor="date" className="form-label">
+      <form onSubmit={handleSubmit} className="cute-form">
+        <div className="cute-input-group">
+          <label htmlFor="date" className="cute-label">
             日付
           </label>
           <input
             type="date"
-            className="form-control"
+            className="cute-form-control"
             id="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="amount" className="form-label">
+        <div className="cute-input-group">
+          <label htmlFor="amount" className="cute-label">
             金額
           </label>
           <input
             type="number"
-            className="form-control"
+            className="cute-form-control"
             id="amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
@@ -92,37 +125,40 @@ export default function Input() {
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="category" className="form-label">
+        <div className="cute-input-group">
+          <label htmlFor="category" className="cute-label">
             カテゴリー
           </label>
-          <select
-            id="category"
-            className="form-select"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {isIncome ? (
-              <>
-                <option>給与</option>
-                <option>お小遣い</option>
-                <option>その他収入</option>
-              </>
-            ) : (
-              <>
-                <option>食費</option>
-                <option>外食費</option>
-                <option>日用品</option>
-                <option>交通費</option>
-                <option>娯楽費</option>
-                <option>その他</option>
-              </>
-            )}
-          </select>
+          <div className="cute-select-wrapper">
+            <select
+              id="category"
+              className="cute-form-select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {isIncome ? (
+                <>
+                  <option>給与</option>
+                  <option>お小遣い</option>
+                  <option>その他収入</option>
+                </>
+              ) : (
+                <>
+                  <option>食費</option>
+                  <option>外食費</option>
+                  <option>日用品</option>
+                  <option>交通費</option>
+                  <option>娯楽費</option>
+                  <option>その他</option>
+                </>
+              )}
+            </select>
+            {categoryIcons[category as keyof typeof categoryIcons]}
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="memo" className="form-label">
+        <div className="cute-input-group">
+          <label htmlFor="memo" className="cute-label">
             メモ
           </label>
           <input
@@ -133,7 +169,7 @@ export default function Input() {
             onChange={(e) => setMemo(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">
+        <button type="submit" className="cute-submit-btn">
           記録する
         </button>
       </form>

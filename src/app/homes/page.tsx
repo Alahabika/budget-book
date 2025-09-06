@@ -85,7 +85,9 @@ export default function Homes() {
   );
   useEffect(() => {
     const fetchBalance = async () => {
-      const { data, error } = await supabase.from("transactions").select("amount");
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("amount");
       if (error) {
         console.error("Error fetching transactions:", error);
         return;
@@ -121,7 +123,7 @@ export default function Homes() {
       setIsSpeechBubbleVisible(false);
     }, 10000);
   };
-  
+
   return (
     <main className="d-flex flex-column align-items-center justify-content-center min-vh-100">
       <div className="text-center position-relative">
