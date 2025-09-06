@@ -28,15 +28,14 @@ export default function Calendar() {
 
       if (error) {
         console.error("Error fetching expenses:", error);
-      } 
+      }
       if (data) {
-      setExpenses(data as Expense[]);
+        setExpenses(data as Expense[]);
       } else {
         setExpenses([]); // ← null の場合に保険
       }
     };
     fetchExpenses();
-
   }, []);
 
   // 前月へ移動
@@ -183,7 +182,7 @@ export default function Calendar() {
                         <div className="fw-bold">{d.getDate()}</div>
                         {expensesByDate[dateKey] && (
                           <div className="text-danger fw-bold">
-                            -¥{expensesByDate[dateKey]}
+                            -¥{expensesByDate[dateKey] * -1}
                           </div>
                         )}
                       </>
@@ -199,21 +198,20 @@ export default function Calendar() {
         return null; // 7日単位でまとめたので他は null
       })}
 
-        <div
-          className="mt-5 p-3 rounded shadow-sm"
-          style={{ backgroundColor: "#f8f9fa" }}
-        >
-          <div className="d-flex justify-content-around fw-bold">
-            <div className="text-success">
-              収入: ¥{totalIncome.toLocaleString()}
-            </div>
-            <div className="text-danger">
-              出費: ¥{-totalExpense.toLocaleString()}
-            </div>
-            <div>合計: ¥{totalBalance.toLocaleString()}</div>
+      <div
+        className="mt-5 p-3 rounded shadow-sm"
+        style={{ backgroundColor: "#f8f9fa" }}
+      >
+        <div className="d-flex justify-content-around fw-bold">
+          <div className="text-success">
+            収入: ¥{totalIncome.toLocaleString()}
           </div>
+          <div className="text-danger">
+            出費: ¥{-totalExpense.toLocaleString()}
+          </div>
+          <div>合計: ¥{totalBalance.toLocaleString()}</div>
         </div>
       </div>
-    
+    </div>
   );
 }
