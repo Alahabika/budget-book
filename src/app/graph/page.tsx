@@ -24,16 +24,16 @@ export default function Graph() {
   const month = currentDate.getMonth();
 
   useEffect(() => {
-  const fetchExpenses = async () => {
-    const { data, error } = await supabase.from("transactions").select("*");
-    if (error) {
-      console.error("Error fetching data:", error);
-    } else {
-      setExpenses(data || []);
-    }
-  };
-  fetchExpenses();
-}, []);
+    const fetchExpenses = async () => {
+      const { data, error } = await supabase.from("transactions").select("*");
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        setExpenses(data || []);
+      }
+    };
+    fetchExpenses();
+  }, []);
 
   // 前月へ移動
   const goToPrevMonth = () => {
