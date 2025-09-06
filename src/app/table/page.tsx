@@ -78,11 +78,10 @@ export default function Calendar() {
 
   const expensesByDate: Record<string, number> = {};
   expenses.forEach((expense) => {
-    const expenseDate = new Date(expense.date);
-    const dateKey = expenseDate.toISOString().slice(0, 10); // ← シンプルに
-    expensesByDate[dateKey] =
-      (expensesByDate[dateKey] || 0) + expense.amount;
+    const dateKey = expense.date; // ← Date にせずそのまま使う
+    expensesByDate[dateKey] = (expensesByDate[dateKey] || 0) + expense.amount;
   });
+
   const monthlyExpenses = expenses.filter((expense) => {
     const expenseDate = new Date(expense.date);
     return (
@@ -170,24 +169,36 @@ export default function Calendar() {
           </div>
         ))}
       </div>
-      <div className="row">
-        {calendarDays.map((date, index) => (
-          <div key={index} className="col col_d text-center py-2 border">
-            {date ? (
-              <>
-                <div className="fw-bold">{date.getDate()}</div>
-                {/* 日付に出費があれば表示 */}
-                {expensesByDate[date.toISOString().slice(0, 10)] && (
-                  <div className="text-danger fw-bold">
-                    -¥{expensesByDate[date.toISOString().slice(0, 10)]}
+      {calendarDays.map((date, index) => {
+        // 週の最初なら <div className="row"> を開始
+        if (index % 7 === 0) {
+          return (
+            <div className="row" key={index}>
+              {calendarDays.slice(index, index + 7).map((d, i) => {
+                const dateKey = d ? d.toLocaleDateString("sv-SE") : "";
+                return (
+                  <div key={i} className="col col_d text-center py-2 border">
+                    {d ? (
+                      <>
+                        <div className="fw-bold">{d.getDate()}</div>
+                        {expensesByDate[dateKey] && (
+                          <div className="text-danger fw-bold">
+                            -¥{expensesByDate[dateKey]}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="text-muted"></div>
+                    )}
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="text-muted"></div>
-            )}
-          </div>
-        ))}
+                );
+              })}
+            </div>
+          );
+        }
+        return null; // 7日単位でまとめたので他は null
+      })}
+
         <div
           className="mt-5 p-3 rounded shadow-sm"
           style={{ backgroundColor: "#f8f9fa" }}
@@ -203,6 +214,6 @@ export default function Calendar() {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }
