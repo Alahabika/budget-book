@@ -14,7 +14,8 @@
     "bootstrap-icons": "^1.13.1",
     "next": "^15.5.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-scroll-picker": "^0.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
