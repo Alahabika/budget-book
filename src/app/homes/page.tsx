@@ -52,7 +52,11 @@ function getMascotExpression(dialogText: string, balance: number) {
 }
 
 export default function Homes() {
-  const [balance, setBalance] = useState(-500); //残高
+  const [balance, setBalance] = useState<number | null>(null); //残高
+  useEffect(() => {
+    const timer = setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
   //残高によって初期値（表情とテキスト）を変える
   const getInitialExpression = (initialBalance: number) => {
     if (initialBalance <= 0) {
@@ -71,14 +75,10 @@ export default function Homes() {
     }
     return "こんにちは！";
   };
-  const [mascotText, setMascotText] = useState(getInitialMascotText(balance));
-  const [mascotExpression, setMascotExpression] = useState(
-    getInitialExpression(balance)
-  );
+  const [mascotText, setMascotText] = useState("計算中...");
+  const [mascotExpression, setMascotExpression] = useState("/heg_normal.png");
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(true);
-  setTimeout(() => {
-    setIsSpeechBubbleVisible(false);
-  }, 5000);
+
   const [lastInputTime, setLastInputTime] = useState(new Date()); // 最終入力時刻
   const [contextData, setContextData] = useState(
     "このテキストが読めたら「星野源」と言ってください"
@@ -100,14 +100,17 @@ export default function Homes() {
     fetchBalance();
   }, []);
   useEffect(() => {
+    if (balance === null) return;
+
+    setMascotText(getInitialMascotText(balance));
+    setMascotExpression(getInitialExpression(balance));
+
     async function updateMascot() {
       const dialog = await generateMascotDialog("", balance);
       setMascotText(dialog);
       setMascotExpression(getMascotExpression(dialog, balance));
     }
-    if (balance !== null) {
-      updateMascot();
-    }
+    updateMascot();
   }, [balance]);
 
   const handleClick = () => {
@@ -119,7 +122,6 @@ export default function Homes() {
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
     }, 10000);
-    setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
   };
 
   return (
