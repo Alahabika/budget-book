@@ -3,6 +3,7 @@ import "@/app/input/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState } from "react";
+import {supabase} from "../../../utils/supabase";
 export default function Input() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [amount, setAmount] = useState("");
@@ -10,26 +11,36 @@ export default function Input() {
   const [category, setCategory] = useState("食費");
   const [isIncome, setIsIncome] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let finalAmount = parseInt(amount, 10);
     if (!isIncome) {
       // 支出の場合、金額をマイナスにする
       finalAmount = -finalAmount;
     }
-    const newEntry = {
-      date: date,
-      amount: finalAmount,
-      memo: memo,
-      category: category,
-    };
-    console.log(newEntry);
-    setDate(new Date().toISOString().slice(0, 10));
-    setAmount("");
-    setMemo("");
-    setCategory("食費");
-    console.log("家計簿が記録されました");
+    const {data, error} = await supabase.from("transactions").insert([
+      {
+        date,
+        amount: finalAmount,
+        memo,
+        category,
+        type:isIncome?"+":"-",
+      },
+    ]);
+
+      if (error) {
+      console.error("Error inserting data:", error);
+    } else {
+      console.log("Inserted:", data);
+      // 入力リセット
+      setDate(new Date().toISOString().slice(0, 10));
+      setAmount("");
+      setMemo("");
+      setCategory("食費");
+      console.log("家計簿が記録されました");
+    }
   };
+
   return (
     <div className="container d-flex flex-column align-items-center mt-5">
       <h1 className="mb-4">家計簿入力</h1>

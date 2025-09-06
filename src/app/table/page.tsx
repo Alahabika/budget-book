@@ -9,7 +9,6 @@ import { getAllBudgets } from "../../../utils/supabasefunctions";
 // 仮のデータを定義
 type Expense = {
   id: number;
-  user_id: string;
   amount: number;
   category: string;
   type: "+" | "-";
