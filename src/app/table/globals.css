@@ -3,3 +3,18 @@
   flex-basis: 14.2857%; /* 100% / 7日 */
   max-width: 14.2857%;
 }
+.col_d {
+  min-height: 80px;
+}
+.yearAndMonth {
+  background-color: #fff;
+  color: #000;
+}
+.month-selector-dropdown {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  z-index: 10;
+}
