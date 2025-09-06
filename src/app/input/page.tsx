@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState } from "react";
 export default function Input() {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [category, setCategory] = useState("食費");
@@ -24,7 +24,7 @@ export default function Input() {
       category: category,
     };
     console.log(newEntry);
-    setDate("");
+    setDate(new Date().toISOString().slice(0, 10));
     setAmount("");
     setMemo("");
     setCategory("食費");

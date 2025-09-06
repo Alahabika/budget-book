@@ -10,6 +10,14 @@ const normalExpressions = [
   { src: "/heg_happy.png", text: "にこにこ" },
   { src: "/heg_sleep.png", text: "すやすや……" },
 ];
+const mudadukaiExpressions = [
+  { src: "/heg_cry.png", text: "> <" },
+  { src: "/heg_gennnari.png", text: "おいおい……" },
+  { src: "/heg_angry.png", text: "こらっ！" },
+];
+const specialHappyExpressions = [
+  { src: "/heg_happy_more.png", text: "わーい" },
+];
 const lowBalanceExpression = { src: "/heg_soondie.png", text: "死にかけ" };
 const zeroBalanceExpression = { src: "/heg_die.png", text: "死にました！" };
 export default function Homes() {
@@ -17,7 +25,7 @@ export default function Homes() {
     normalExpressions[0]
   ); //表情
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(false); //吹き出し
-  const [balance, setBalance] = useState(2500); //残高
+  const [balance, setBalance] = useState(1500); //残高
   useEffect(() => {
     if (balance <= 0) {
       setCurrentExpression(zeroBalanceExpression);
