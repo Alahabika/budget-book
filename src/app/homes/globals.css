@@ -1,0 +1,37 @@
+.speech-bubble {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid orange; /*縁取りがオレンジ*/
+  padding: 10px 15px;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 15px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 0 10px;
+    border-color: orange transparent transparent transparent;
+  }
+}
+
+.status-bar {
+  color: #333;
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: -8px 8px 15px rgba(0, 0, 0, 0.2);
+  border: 2px solid #333;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
