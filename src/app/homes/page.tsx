@@ -6,8 +6,14 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { supabase } from "../../../utils/supabase";
+import { ImAngry, ImSmile } from "react-icons/im";
+import React from "react";
 
-async function generateMascotDialog(context: string, balance: number) {
+async function generateMascotDialog(
+  context: string,
+  balance: number,
+  personalityValue: number
+) {
   console.log("generateMascotDialog関数が呼び出されました。");
   const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!API_KEY) {
@@ -16,12 +22,22 @@ async function generateMascotDialog(context: string, balance: number) {
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   let prompt;
-  if (balance <= 0) {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は0円を下回り、あなたは栄養が足りなくなり死にました。ユーザーが貯金したいと思うように短い哀愁の漂うセリフを一つ提案してください。`;
-  } else if (balance <= 1000) {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は1000円以下とかなり少ない状況です。そのためあなたは栄養不足でお腹がペコペコで死にそうです。この状況が打破できるよう、弱弱しくユーザーに助けて欲しい旨を伝える短いセリフを一つ提案してください。`;
+  if (personalityValue) {
+    if (balance <= 0) {
+      prompt = `あなたは家計簿アプリのマスコットとして、家計の状況を辛口に添削します。ユーザーの残高は0円を下回り、あなたは栄養が足りなくなり死にました。ユーザーが貯金したいと思うように短い厳しくも哀愁の漂うセリフを一つ提案してください。`;
+    } else if (balance <= 1000) {
+      prompt = `あなたは家計簿アプリのマスコットとして、家計の状況を辛口に添削します。ユーザーの残高は1000円以下とかなり少ない状況です。そのためあなたは栄養不足でお腹がペコペコで死にそうです。この状況が打破できるよう、厳しくも核心を突く短いセリフを一つ提案してください。`;
+    } else {
+      prompt = `あなたは家計簿アプリのマスコットとして、家計の状況を辛口に添削します。\n\n${context}\n\nこの状況に合った、ダメなところはバッサリ斬りながらも、愛のある短いセリフを一つ提案してください`;
+    }
   } else {
-    prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーを応援し、アプリの利用を促進してください。現在の状況は以下の通りです。\n\n${context}\n\nこの状況に合った、短いポジティブなセリフを一つ提案してください。`;
+    if (balance <= 0) {
+      prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は0円を下回り、あなたは栄養が足りなくなり死にました。ユーザーが貯金したいと思うように短い哀愁の漂うセリフを一つ提案してください。`;
+    } else if (balance <= 1000) {
+      prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーの残高は1000円以下とかなり少ない状況です。そのためあなたは栄養不足でお腹がペコペコで死にそうです。この状況が打破できるよう、弱弱しくユーザーに助けて欲しい旨を伝える短いセリフを一つ提案してください。`;
+    } else {
+      prompt = `あなたは家計簿アプリのマスコットキャラクターです。ユーザーを応援し、アプリの利用を促進してください。現在の状況は以下の通りです。\n\n${context}\n\nこの状況に合った、短いポジティブなセリフを一つ提案してください。`;
+    }
   }
 
   const result = await model.generateContent(prompt);
@@ -30,50 +46,74 @@ async function generateMascotDialog(context: string, balance: number) {
   console.log("AIが生成したセリフ:", text);
   return text.trim();
 }
-function getMascotExpression(dialogText: string, balance: number) {
+function getMascotExpression(
+  dialogText: string,
+  balance: number,
+  personalityValue: number
+) {
   if (balance <= 0) {
     return "/heg_die.png";
   } else if (balance <= 1000) {
     return "/heg_soondie.png";
-  } else if (
-    dialogText.includes("すごい") ||
-    dialogText.includes("おめでとう") ||
-    dialogText.includes("ありがとう") ||
-    dialogText.includes("やったー")
-  ) {
-    return "/heg_happy.png";
-  } else if (
-    dialogText.includes("残念") ||
-    dialogText.includes("泣") ||
-    dialogText.includes("涙")
-  ) {
-    return "/heg_cry.png";
-  } else if (
-    dialogText.includes("！！") ||
-    dialogText.includes("わーい") ||
-    dialogText.includes("リフレッシュ")
-  ) {
-    return "/heg_happy_more.png";
-  } else if (
-    dialogText.includes("おい") ||
-    dialogText.includes("こら") ||
-    dialogText.includes("怒")
-  ) {
-    return "/heg_angry.png";
-  } else if (
-    dialogText.includes("お前") ||
-    dialogText.includes("う～ん") ||
-    dialogText.includes("うーん")
-  ) {
-    return "heg_gennnnari.png";
   }
-  {
-    return "/heg_normal.png";
+  if (personalityValue) {
+    if (
+      dialogText.includes("お前") ||
+      dialogText.includes("う～ん") ||
+      dialogText.includes("うーん")
+    ) {
+      return "/heg_gennnnari.png";
+    } else if (
+      dialogText.includes("残念") ||
+      dialogText.includes("泣") ||
+      dialogText.includes("涙")
+    ) {
+      return "/heg_cry.png";
+    } else {
+      return "/heg_angry.png";
+    }
+  } else {
+    if (
+      dialogText.includes("すごい") ||
+      dialogText.includes("おめでとう") ||
+      dialogText.includes("ありがとう") ||
+      dialogText.includes("やったー")
+    ) {
+      return "/heg_happy.png";
+    } else if (
+      dialogText.includes("残念") ||
+      dialogText.includes("泣") ||
+      dialogText.includes("涙")
+    ) {
+      return "/heg_cry.png";
+    } else if (
+      dialogText.includes("！！") ||
+      dialogText.includes("わーい") ||
+      dialogText.includes("リフレッシュ")
+    ) {
+      return "/heg_happy_more.png";
+    } else if (
+      dialogText.includes("おい") ||
+      dialogText.includes("こら") ||
+      dialogText.includes("怒")
+    ) {
+      return "/heg_angry.png";
+    } else if (
+      dialogText.includes("お前") ||
+      dialogText.includes("う～ん") ||
+      dialogText.includes("うーん")
+    ) {
+      return "/heg_gennnnari.png";
+    }
+    {
+      return "/heg_normal.png";
+    }
   }
 }
 
 export default function Homes() {
   const [balance, setBalance] = useState<number | null>(null); //残高
+  const [isAngry, setIsAngry] = useState(false); //表情
   //  useEffect( () => {
   //   const timer = setTimeout(() => setIsSpeechBubbleVisible(false),5000);
   //    return () => clearTimeout(timer);
@@ -183,18 +223,54 @@ export default function Homes() {
     } else {
       setMascotExpression("/heg_sleep.png");
     }
-    const dialog = await generateMascotDialog(context, balance ?? 0);
+    const dialog = await generateMascotDialog(
+      context,
+      balance ?? 0,
+      personalityValue
+    );
     setMascotText(dialog);
-    setMascotExpression(getMascotExpression(dialog, balance ?? 0));
+    setMascotExpression(
+      getMascotExpression(dialog, balance ?? 0, personalityValue)
+    );
 
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
       setMascotText("・・・");
-    }, 5000);
+    }, 10000);
   };
-
+  //アイコンがクリックされたら性格が変わる
+  const handleIconClick = () => {
+    setIsAngry(!isAngry);
+  };
+  const personalityValue = isAngry ? 1 : 0;
   return (
     <main className="d-flex flex-column align-items-center justify-content-center min-vh-100">
+      {/* isAngry の値によって表示するアイコンを切り替える */}
+      {isAngry ? (
+        <ImAngry
+          size={50}
+          onClick={handleIconClick}
+          style={{
+            color: "red",
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            cursor: "pointer", // ホバー時にカーソルをポインタにする
+          }}
+        />
+      ) : (
+        <ImSmile
+          size={50}
+          onClick={handleIconClick}
+          style={{
+            color: "green",
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            cursor: "pointer",
+          }}
+        />
+      )}
       <div className="text-center position-relative">
         <div
           onClick={handleClick}
