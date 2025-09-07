@@ -124,7 +124,7 @@ export default function Graph() {
           </button>
         </div>
       </div>
-      <div style={{ position: "relative", height: "50vw", width: "50vw" }}>
+      <div style={{ position: "relative", height: "70vw", width: "70vw" }}>
         <Pie data={chartData} options={options} />
       </div>
       {/*グラフの下にカテゴリー別の合計金額を表示する */}

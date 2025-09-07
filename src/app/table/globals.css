@@ -1,4 +1,5 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+
 .col {
   flex-basis: 14.2857%; /* 100% / 7日 */
   max-width: 14.2857%;

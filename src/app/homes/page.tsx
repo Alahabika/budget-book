@@ -79,7 +79,6 @@ export default function Homes() {
   const [mascotExpression, setMascotExpression] = useState("/heg_normal.png");
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(true);
 
-  const [lastInputTime, setLastInputTime] = useState(new Date()); // 最終入力時刻
   const [contextData, setContextData] = useState(
     "このテキストが読めたら「星野源」と言ってください"
   );
