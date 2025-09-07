@@ -78,6 +78,10 @@ export default function Homes() {
   //   const timer = setTimeout(() => setIsSpeechBubbleVisible(false),5000);
   //    return () => clearTimeout(timer);
   //  },[]);
+  //  useEffect( () => {
+  //   const timer = setTimeout(() => setIsSpeechBubbleVisible(false),5000);
+  //    return () => clearTimeout(timer);
+  //  },[]);
   //残高によって初期値（表情とテキスト）を変える
   const getInitialExpression = (initialBalance: number) => {
     if (initialBalance <= 0) {
@@ -143,6 +147,10 @@ export default function Homes() {
   `;
     }
   }
+
+  //const [contextData, setContextData] = useState(
+  //  "このテキストが読めたら「星野源」と言ってください"
+  //);
   useEffect(() => {
     const fetchBalance = async () => {
       const { data, error } = await supabase
@@ -167,6 +175,7 @@ export default function Homes() {
     setIsSpeechBubbleVisible(true);
     setTimeout(() => {
       setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
+      setIsSpeechBubbleVisible(false);
       setMascotText("・・・");
     }, 3000);
   }, [balance]);

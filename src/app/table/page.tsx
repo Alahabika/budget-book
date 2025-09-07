@@ -151,7 +151,7 @@ export default function Calendar() {
                         <div className="fw-bold">{d.getDate()}</div>
                         {expensesByDate[dateKey] && (
                           <div
-                            className={`fw-bold ${
+                            className={` ${
                               expensesByDate[dateKey] >= 0
                                 ? "text-success"
                                 : "text-danger"
