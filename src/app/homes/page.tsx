@@ -85,9 +85,7 @@ export default function Homes() {
   );
   useEffect(() => {
     const fetchBalance = async () => {
-      const { data, error } = await supabase
-        .from("transactions")
-        .select("amount");
+      const { data, error } = await supabase.from("transactions").select("amount");
       if (error) {
         console.error("Error fetching transactions:", error);
         return;
@@ -109,6 +107,7 @@ export default function Homes() {
       const dialog = await generateMascotDialog("", balance);
       setMascotText(dialog);
       setMascotExpression(getMascotExpression(dialog, balance));
+
     }
     updateMascot();
   }, [balance]);
@@ -122,8 +121,12 @@ export default function Homes() {
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
     }, 10000);
+<<<<<<< HEAD
+=======
+    setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
+>>>>>>> e5763621d7f7b4e2f3c6353ca163dcfe7e0a63d9
   };
-
+  
   return (
     <main className="d-flex flex-column align-items-center justify-content-center min-vh-100">
       <div className="text-center position-relative">
