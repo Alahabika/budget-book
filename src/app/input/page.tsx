@@ -30,7 +30,12 @@ const categoryIcons = {
 };
 
 export default function Input() {
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const today = new Date();
+  const JST_OFFSET = 9 * 60;
+  const utc = today.getTime() + today.getTimezoneOffset() * 60 * 1000;
+  const jstDate = new Date(utc + JST_OFFSET * 60 * 1000);
+  const formattedDate = jstDate.toISOString().slice(0, 10);
+  const [date, setDate] = useState(formattedDate);
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [category, setCategory] = useState("食費");
@@ -163,7 +168,7 @@ export default function Input() {
           </label>
           <input
             type="text"
-            className="form-control"
+            className="cute-form-control"
             id="memo"
             value={memo}
             onChange={(e) => setMemo(e.target.value)}

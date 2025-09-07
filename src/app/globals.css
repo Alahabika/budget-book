@@ -1,9 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Mochiy+Pop+P+One&display=swap");
 @import "tailwindcss";
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --cute-orange: #ffdab9; /* パステルオレンジ */
+  --cute-orange-dark: #ffa07a; /* 濃いオレンジ */
+  --cute-pink: #ffc0cb; /* パステルピンク */
+  --cute-purple: #fff; /* 白 */
+  --cute-text-color: #333;
 }
 
 @theme inline {
@@ -23,7 +30,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Mochiy Pop P One", sans-serif;
 }
 
 h1 {
@@ -38,8 +45,21 @@ button {
   border: none;
   cursor: pointer;
 }
+.cute-icon {
+  font-weight: bold;
+  color: var(--cute-orange-dark);
+  margin-bottom: 0.5rem;
+  display: block;
+}
 
 .header-icon-link:hover i {
-  transform: scale(1.2);
+  transform: scale(1.4);
   transition: transform 0.3s ease-in-out;
+}
+
+.cute-label {
+  font-weight: bold;
+  color: var(--cute-orange);
+  margin-bottom: 0.5rem;
+  display: block;
 }
