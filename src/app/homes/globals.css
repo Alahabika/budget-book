@@ -9,6 +9,12 @@
   transform: translateX(-50%);
   margin-bottom: 15px;
 
+  max-width: 70%;          /* これで幅を制限 */
+  display: inline-block;   /* ←テキストに合わせて幅が決まる */
+  white-space: normal;     /* ←折り返しを許可 */
+  word-wrap: break-word;   /* ←長い単語も折り返す */
+  text-align: left;        /* ←自然に見せたいなら左寄せ */
+
   &::after {
     content: "";
     position: absolute;
@@ -29,11 +35,11 @@
   padding: 20px 30px;
   border-radius: 10px;
   box-shadow: -8px 8px 15px rgba(0, 0, 0, 0.2);
-  border: 2px solid #333;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 }
 
 /* ページ全体の背景 */
