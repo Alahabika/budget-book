@@ -107,6 +107,7 @@ export default function Homes() {
       const dialog = await generateMascotDialog("", balance);
       setMascotText(dialog);
       setMascotExpression(getMascotExpression(dialog, balance));
+
     }
     updateMascot();
   }, [balance]);
@@ -120,6 +121,7 @@ export default function Homes() {
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
     }, 10000);
+    setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
   };
   
   return (
