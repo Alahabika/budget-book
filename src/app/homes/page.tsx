@@ -137,13 +137,13 @@ export default function Homes() {
     if (latestExpense && latestExpense.memo) {
       const latestMemo = latestExpense.memo;
       context = `現在の残高は${balance}円です。
-    ユーザーが一番最近に使ったカテゴリは${latestCategory}で、
+    ユーザーが一番最近に使ったカテゴリは${latestCategory}で、そのお金は${latestAmount}です。
     その中身は${latestMemo}です。
   `;
       console.log(latestMemo);
     } else {
       context = `現在の残高は${balance}円です。
-    ユーザーが一番最近に使ったカテゴリは${latestCategory}です
+    ユーザーが一番最近に使ったカテゴリは${latestCategory}で、そのお金は${latestAmount}です。
   `;
     }
   }
