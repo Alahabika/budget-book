@@ -53,10 +53,10 @@ function getMascotExpression(dialogText: string, balance: number) {
 
 export default function Homes() {
   const [balance, setBalance] = useState<number | null>(null); //残高
-  useEffect( () => {
-    const timer = setTimeout(() => setIsSpeechBubbleVisible(false),5000);
-    return () => clearTimeout(timer);
-  },[]);
+//  useEffect( () => {
+ //   const timer = setTimeout(() => setIsSpeechBubbleVisible(false),5000);
+//    return () => clearTimeout(timer);
+//  },[]);
   //残高によって初期値（表情とテキスト）を変える
   const getInitialExpression = (initialBalance: number) => {
     if (initialBalance <= 0) {
@@ -79,10 +79,6 @@ export default function Homes() {
   const [mascotExpression, setMascotExpression] = useState("/heg_normal.png");
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(true);
  
-  const [lastInputTime, setLastInputTime] = useState(new Date()); // 最終入力時刻
-  const [contextData, setContextData] = useState(
-    "このテキストが読めたら「星野源」と言ってください"
-  );
   useEffect(() => {
     const fetchBalance = async () => {
       const { data, error } = await supabase.from("transactions").select("amount");
@@ -102,25 +98,27 @@ export default function Homes() {
 
     setMascotText(getInitialMascotText(balance));
     setMascotExpression(getInitialExpression(balance));
-
-    async function updateMascot() {
-      const dialog = await generateMascotDialog("", balance);
-      setMascotText(dialog);
-      setMascotExpression(getMascotExpression(dialog, balance));
-
-    }
-    updateMascot();
-  }, [balance]);
-
-  const handleClick = () => {
-    generateMascotDialog("", balance).then((dialog) => {
-      setMascotText(dialog);
-      setMascotExpression(getMascotExpression(dialog, balance));
-    });
     setIsSpeechBubbleVisible(true);
     setTimeout(() => {
       setIsSpeechBubbleVisible(false);
-    }, 10000);
+      setMascotText("・・・");
+    }, 3000);
+  }, [balance]);
+
+  const handleClick = async () => {
+    if(isSpeechBubbleVisible) return;
+
+    setIsSpeechBubbleVisible(true);
+    setMascotExpression("/heg_sleep.png");
+    const dialog = await generateMascotDialog("", balance ?? 0);
+    setMascotText(dialog);
+    setMascotExpression(getMascotExpression(dialog, balance ?? 0));
+    
+
+    setTimeout(() => {
+      setIsSpeechBubbleVisible(false);
+      setMascotText("・・・");
+    }, 5000);
   };
   
   return (
