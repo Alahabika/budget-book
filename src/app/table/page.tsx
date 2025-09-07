@@ -19,6 +19,7 @@ export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 8)); // 2025年9月を初期値に
   const [showMonthSelector, setShowMonthSelector] = useState(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -95,6 +96,20 @@ export default function Calendar() {
     .reduce((sum, expense) => sum + expense.amount, 0);
 
   const totalBalance = totalIncome + totalExpense;
+  // 現在表示している月の取引だけを抽出
+  const currentMonthExpenses = expenses.filter((expense) => {
+    const expenseDate = new Date(expense.date);
+    return (
+      expenseDate.getFullYear() === currentDate.getFullYear() &&
+      expenseDate.getMonth() === currentDate.getMonth()
+    );
+  });
+  //日付を新しい順に並び変える
+  const sortedExpenses = [...currentMonthExpenses].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
   return (
     <div className="container mt-4">
       {/* 年月と切り替えボタン */}
@@ -102,18 +117,16 @@ export default function Calendar() {
         <button className="btn btn-outline-secondary" onClick={goToPrevMonth}>
           &lt;
         </button>
-        <div className="position-relative">
-          <button
-            className="text-center yearAndMonth fs-2"
-            onClick={toggleMonthSelector}
-          >
-            {year}年 {month + 1}月
-          </button>
+        <button
+          className="text-center yearAndMonth fs-2"
+          onClick={toggleMonthSelector}
+        >
+          {year}年 {month + 1}月
+        </button>
 
-          <button className="btn btn-outline-secondary" onClick={goToNextMonth}>
-            &gt;
-          </button>
-        </div>
+        <button className="btn btn-outline-secondary" onClick={goToNextMonth}>
+          &gt;
+        </button>
       </div>
 
       <div className="row text-center border-bottom pb-2">
@@ -171,11 +184,32 @@ export default function Calendar() {
             収入: ¥{totalIncome.toLocaleString()}
           </div>
           <div className="text-danger">
-            出費: ¥{totalExpense.toLocaleString()}
+            出費: -¥{(totalExpense * -1).toLocaleString()}
           </div>
           <div>合計: ¥{totalBalance.toLocaleString()}</div>
         </div>
       </div>
+      <button
+        onClick={() => setShowDetails(!showDetails)}
+        className="cute-submit-btn"
+      >
+        {showDetails ? "詳細を非表示" : "詳細を表示"}
+      </button>
+      {/* 詳細表示エリア*/}
+      {showDetails && (
+        <div className="details-table mt-4">
+          <h2>取引詳細</h2>
+          <ul>
+            {/* 並び替えた配列をmap()で表示 */}
+            {sortedExpenses.map((item) => (
+              <li key={item.id}>
+                {item.date} - {item.category}({item.memo}): {item.type}
+                {Math.abs(item.amount)}円
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

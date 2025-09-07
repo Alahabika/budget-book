@@ -63,14 +63,14 @@ body {
 }
 
 .cute-btn-primary {
-  background-color: var(--cute-orange);
+  background-color: var(--cute-orange-dark);
   color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cute-btn-outline {
   background-color: transparent;
-  color: var(--cute-orange-dark);
+  color: var(--cute-orange);
 }
 
 .cute-btn:hover {
@@ -114,7 +114,15 @@ body {
   box-shadow: 0 0 0 3px rgba(255, 160, 122, 0.3);
   outline: none;
 }
-
+.cute-form-select option {
+  background-color: #ffffff;
+  color: #444;
+  font-size: 1rem;
+}
+.cute-form-select option:hover {
+  background-color: var(--cute-orange);
+  color: #fff;
+}
 .cute-select-wrapper {
   position: relative;
   display: flex;

@@ -78,7 +78,11 @@ export default function Homes() {
   const [mascotText, setMascotText] = useState("計算中...");
   const [mascotExpression, setMascotExpression] = useState("/heg_normal.png");
   const [isSpeechBubbleVisible, setIsSpeechBubbleVisible] = useState(true);
- 
+
+  const [lastInputTime, setLastInputTime] = useState(new Date()); // 最終入力時刻
+  const [contextData, setContextData] = useState(
+    "このテキストが読めたら「星野源」と言ってください"
+  );
   useEffect(() => {
     const fetchBalance = async () => {
       const { data, error } = await supabase.from("transactions").select("amount");
@@ -94,7 +98,7 @@ export default function Homes() {
     fetchBalance();
   }, []);
   useEffect(() => {
-    if(balance === null) return;
+    if (balance === null) return;
 
     setMascotText(getInitialMascotText(balance));
     setMascotExpression(getInitialExpression(balance));
