@@ -270,7 +270,7 @@ export default function Homes() {
           }}
         />
       )}
-      <div className="text-center position-relative">
+      <div className="text-center position-relative character-container">
         <div
           onClick={handleClick}
           style={{

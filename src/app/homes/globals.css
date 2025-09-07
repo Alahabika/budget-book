@@ -1,20 +1,27 @@
+.character-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .speech-bubble {
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid orange; /*縁取りがオレンジ*/
   padding: 10px 15px;
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 15px;
-
-  max-width: 70%; /* これで幅を制限 */
-  display: inline-block; /* ←テキストに合わせて幅が決まる */
+  position: relative;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%; /* これで幅を制限 */
+  display: inline-block;
   white-space: normal; /* ←折り返しを許可 */
   word-wrap: break-word; /* ←長い単語も折り返す */
-  text-align: left; /* ←自然に見せたいなら左寄せ */
+  text-align: center;
   overflow-y: auto;
+  z-index: 10;
   &::after {
     content: "";
     position: absolute;
