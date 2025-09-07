@@ -166,9 +166,9 @@ export default function Homes() {
     setMascotExpression(getInitialExpression(balance));
     setIsSpeechBubbleVisible(true);
     setTimeout(() => {
-      setTimeout(() => setIsSpeechBubbleVisible(false), 5000);
+      setIsSpeechBubbleVisible(false);
       setMascotText("・・・");
-    }, 3000);
+    }, 5000);
   }, [balance]);
 
   const handleClick = async () => {
