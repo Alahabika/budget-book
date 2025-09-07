@@ -18,6 +18,23 @@
   padding: 1.5rem;
   margin-top: 2rem;
 }
+
+.calendar-wrapper {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 0;       /* 👈 中の余白は0 */
+  width: 100%
+}
+
+.calendar-wrapper .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+
+
+
 .month-selector-dropdown {
   background-color: #fff;
   border: 1px solid #ccc;
@@ -62,4 +79,12 @@
 
 .details-table li:last-child {
   border-bottom: none; /* 最後の項目は区切り線を消す */
+}
+
+body {
+  background-image: url("/background.png"); /* public/background.png */
+  background-size: cover;       /* 画面いっぱいに拡大・縮小 */
+  background-position: center;  /* 中央寄せ */
+  background-repeat: no-repeat; /* 繰り返さない */
+  background-attachment: fixed; /* スクロールしても固定（お好み） */
 }

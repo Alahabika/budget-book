@@ -128,7 +128,7 @@ export default function Calendar() {
           &gt;
         </button>
       </div>
-
+    <div className="calendar-wrapper w-100">
       <div className="row text-center border-bottom pb-2">
         {["日", "月", "火", "水", "木", "金", "土"].map((day) => (
           <div key={day} className="col">
@@ -174,7 +174,7 @@ export default function Calendar() {
         }
         return null; // 7日単位でまとめたので他は null
       })}
-
+    </div>
       <div
         className="mt-5 p-3 rounded shadow-sm"
         style={{ backgroundColor: "#f8f9fa" }}

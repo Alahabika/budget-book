@@ -153,3 +153,11 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+body {
+  background-image: url("/background.png"); /* public/background.png */
+  background-size: cover;       /* 画面いっぱいに拡大・縮小 */
+  background-position: center;  /* 中央寄せ */
+  background-repeat: no-repeat; /* 繰り返さない */
+  background-attachment: fixed; /* スクロールしても固定（お好み） */
+}
