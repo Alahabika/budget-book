@@ -60,13 +60,16 @@ function getMascotExpression(
     if (
       dialogText.includes("お前") ||
       dialogText.includes("う～ん") ||
-      dialogText.includes("うーん")
+      dialogText.includes("がっかり") ||
+      dialogText.includes("うーん") ||
+      dialogText.includes("呆れ")
     ) {
       return "/heg_gennnnari.png";
     } else if (
       dialogText.includes("残念") ||
       dialogText.includes("泣") ||
-      dialogText.includes("涙")
+      dialogText.includes("涙") ||
+      dialogText.includes("かなし")
     ) {
       return "/heg_cry.png";
     } else {
@@ -77,13 +80,16 @@ function getMascotExpression(
       dialogText.includes("すごい") ||
       dialogText.includes("おめでとう") ||
       dialogText.includes("ありがとう") ||
-      dialogText.includes("やったー")
+      dialogText.includes("やったー") ||
+      dialogText.includes("うれしい") ||
+      dialogText.includes("嬉しい")
     ) {
       return "/heg_happy.png";
     } else if (
       dialogText.includes("残念") ||
       dialogText.includes("泣") ||
-      dialogText.includes("涙")
+      dialogText.includes("涙") ||
+      dialogText.includes("かなし")
     ) {
       return "/heg_cry.png";
     } else if (
@@ -101,11 +107,13 @@ function getMascotExpression(
     } else if (
       dialogText.includes("お前") ||
       dialogText.includes("う～ん") ||
+      dialogText.includes("がっかり") ||
       dialogText.includes("うーん")
     ) {
       return "/heg_gennnnari.png";
-    }
-    {
+    } else if (personalityValue) {
+      return "/heg_angry.png";
+    } else {
       return "/heg_normal.png";
     }
   }
